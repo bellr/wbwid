@@ -1,0 +1,58 @@
+<script language='JavaScript'>
+    discount = {discount};
+    new Exchange('{direct}',{konvers},{comission});
+</script>
+<div class="cont-form">
+    <center>
+        <div id="forData"></div>
+		<h1>{L_title_refill_small} {desc_val_in} {L_deposit} {desc_uslugi} {L_title_refill_cash}</h1>
+    <form name="form_exch" id="form_exch" method="post" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'exchanger.creat_demand',p:serialize(this),callback:'creatShowDemand'}); return false;">
+        <table width="410" bgColor="#ebebeb" class="table-form">
+            <tr class="text" bgColor="#ffffff">
+                <td align="right">Отдаете, {type_cur}:&nbsp;</td>
+                <td align="left">
+                    <input type="text" name="in_val" size="13" value="0" id="in_val"
+                           onblur=i_o(true) onkeyup=i_o() onchange=i_o()>
+                </td>
+            </tr>
+            <tr bgColor="#f3f7ff">
+                <td colspan="2" align="left" class="text_log"><b>Вы должны иметь, {desc_val_out} {type_cur}: </b>
+                    <span id=kom_08>0</span>
+            </tr>
+            <tr class="text" bgColor="#ffffff">
+                <td align="right" height="4">Получаете, {desc_val_in}:&nbsp;<br /><span class="red" id="discont"></span></td>
+                <td align="left" height="4">
+                    <input type="text" name="out_val" size="13" value="0" id="out_val"
+                           onblur=o_i(true) onkeyup=o_i() onchange=o_i()>
+                </td>
+            </tr>
+            <tr bgColor="#f3f7ff">
+                <td colspan="2" align="left" class="text_log"><b>Доступно для обмена, {desc_val_in}: {format_balance}</b></td>
+            </tr>
+            <tr class="text" bgColor="#ffffff">
+                {Constructor}
+                </td>
+            </tr>
+            <tr class="text" bgColor="#ffffff">
+                <td align="right">E-Mail :&nbsp;<br>
+                </td>
+                <td align="left">
+                    <input type="text" name="email" id="email" value="{email}" size="20">
+                </td>
+            </tr>
+        </table>
+        <br />
+        <div class="text">C <a href="http://wm-rb.net/rules/" target="_blank" title="Правила предоставления услуг">правилами</a> предоставления услуг согласен <input type="checkbox" name="rules"></div>
+        <br />
+        <input type="hidden" name="type_operation" value="{type_operation}" readonly="readonly">
+        <input type="hidden" name="ex_out" value="{output}" readonly="readonly">
+        <input type="hidden" name="ex_in" value="{input}" readonly="readonly">
+        <button class="button_yellow">{L_next}</button>
+    </form>
+    </center>
+    <br />
+    <div class="info-text">
+        Обработка заявок производиться ТОЛЬКО после подтверждения оплаты на <a href="{HOME_URL}" rel="nofollow"> главной странице сервиса</a> перейдя по ссылке &laquo;Сообщить об оплате&raquo; и указав номер заявки, зачисление денежных средств происходить в течении 2-4 часов с момента подтверждения оплаты.
+    </div>
+</div>
+

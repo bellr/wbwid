@@ -1,0 +1,22 @@
+<?php
+return array(
+    'L_log_title' => 'WM-RB.net — Сервис автоматического обмена электронных валют.',
+    'L_send' => 'Отправить',
+    'L_your_email' => 'Ваш E-mail',
+    'L_password' => 'Пароль',
+    'L_enter' => 'Войти',
+    'L_my_kabinet' => 'Личный кабинет',
+    'L_register' => 'Регистрация',
+    'L_rest_pass' => 'Забыли пароль?',
+    'L_send1' => '','L_send1' => '',
+
+
+
+
+
+);
+
+
+
+
+

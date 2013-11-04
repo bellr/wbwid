@@ -1,0 +1,13 @@
+<?php
+return array(
+    'L_cash_replen'=>'Пополнение наличными',
+	'L_replen_card'=>'Пополнение карты',
+	'L_pay_services'=>'Оплата услуги',
+	
+	
+);
+
+
+
+
+

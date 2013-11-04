@@ -1,0 +1,20 @@
+<?php
+return array(
+    'L_exchange' => 'Обмен',
+    'L_on' => 'на',
+    'L_next' => 'продолжить',
+    'L_subject_mail' => 'Создание новой заявки',
+    'L_title_refill' => 'Пополнение наличными',
+    'L_title_refill_small' => 'Пополнение',
+    'L_title_refill_cash' => 'наличными',
+    'L_deposit'=>'депозита',
+
+
+
+
+);
+
+
+
+
+
