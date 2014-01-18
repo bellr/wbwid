@@ -1,0 +1,73 @@
+<div class="registration">
+
+        <h1>Правила и условия партнерской программы</h1>
+
+    <div class="black">
+        Правила и условия партнерской программы
+    </div><br />
+    <div class="text" align="left">
+        <span align="center" id="margin">Если Вы владелец сайта и Вам нужен дополнительный доход, то Вы пришли по адресу. </span><br />
+        От вас требуется только зарегистрироваться в партнерской программе, выбрать подходящий для Вашего сайта баннер,
+        форму оплаты или разместить партнерскую ссылку со своим интерфейсом.
+        За переход каждого уникального пользователя с Вашего сайта на сервис WM-RB.net Вам будет перечислено 0.01$, а при совершении операции 0.3% от поступившей суммы.
+        Каждый пользователь перешедший по Вашей ссылке, будет запоминаться нашим сервисом, если он при первом своем посещении не совершит никаких платежей,
+        Вы будете получать прибыль при следующих его посещениях, даже если он придет самостоятельно.<br /><br />
+        <span id="margin">Преимущества Нашей партнерской программы:</span>
+        <blockquote>
+            - оплата за клики (переходы);<br />
+            - сохранение cookies пришедшего по Вашей ссылке пользователя;<br />
+            - автоматические выплаты вознаграждения;
+        </blockquote>
+
+    </div>
+    <br />
+    <div class="black" align="left">
+        Запрещенные методы размещения партнерских материалов :</div>
+    <br />
+    <div class="text" align="left">
+        <blockquote>
+            - размещение ссылок на доменах ниже второго уровня;<br />
+            - размещение ссылок на сайтах автосерфинга, почтовых рассылок и других подобных сайтах;<br />
+            - размещать ссылки в всплывающих окнах;<br />
+            - использовать код, изменяющий видимость партнерской ссылки или баннера;<br />
+            - использовать код, автоматически открывающий и/или перезагружающий страницы сервиса «WM-RB.net» без взаимодействия с пользователем;<br />
+            - размещать код ссылки на страницах, не несущих полезной информации (фреймы, дорвеи и т.п.).
+        </blockquote>
+    </div>
+    <br />
+    <div class="black">
+        Заполните данную форму для регистрации в партнерской программе
+    </div><br /><br />
+
+    <form  name="register" id="register" action="index.aspx" method="post" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'info.registration',p:serialize(this)}); return false;">
+        <table width="400"  border="0" cellspacing="1" cellpadding="10" bgColor="#ebebeb">
+            <tr align="center" bgColor="#ffffff">
+                <td class="text"><label class="hint-1" for="email">Ваш E-mail :</label></td>
+                <td id="padding"><input type="text" name="email" id="email" maxlength="52" style="width:140;" title="Ваше учетное имя в системе"></td>
+            </tr>
+            <tr align="center" bgColor="#ffffff">
+                <td class="text">Пароль :</td>
+                <td id="padding"><input type="password" name="pass" id="pass" maxlength="52" style="width:140;"></td>
+            </tr>
+            <tr align="center" bgColor="#ffffff">
+                <td class="text">Повторите пароль :</td>
+                <td id="padding"><input type="password" name="repass" id="repass" maxlength="52" style="width:140;"></td>
+            </tr>
+            <!--tr align="center" bgColor="#ffffff">
+                <td class="text">Ваше имя :</td>
+                <td id="padding"><input type="text" name="username" id="username" maxlength="52" style="width:140;" title="Имя должно быть реальным. Пример : Виталий"></td>
+            </tr-->
+            <tr align="center" bgColor="#ffffff">
+                <td class="text">Ваш сайт :</td>
+                <td id="padding" height="50"><input type="text" name="host" id="host" maxlength="52" style="width:140;"><br />
+                    <span class="text_log">Пример: WWW.ваш_домен.ru</span></td>
+            </tr>
+            <tr align="center" bgColor="#ffffff">
+                <td colspan="2">
+                    <input type="hidden" name="action" value="addpartner" />
+                    <button class="button_yellow">Зарегистрироваться</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

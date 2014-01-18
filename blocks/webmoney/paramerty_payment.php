@@ -1,20 +1,20 @@
 <?
 class paramerty_payment extends TemplateWidgets {
 
-    function __construct($action_method,$vars) {
-        $this->$action_method($vars);
-    }
+    public function block($P) {
 
-    private function block($vars) {
-
-        $vars['hesh_easypay'] = md5($vars['did'].$vars['purse_out'].$vars['out_val'].Config::$wmBase['s_k']);
-		$output = $vars['output'];
+        $P = $P->vars;
+		$output = $P['output'];
         if ($output == "WMZ" || $output == "WMR" || $output == "WME" || $output == "WMG" || $output == "WMU" || $output == "WMY" || $output == "WMB") {$output = "WMT";}
         $vars['wmid'] = Cookies::get('wmid');
+        $vars['type_action'] = $P['type_action'];
+        $vars['output_system'] = $output;
 
-		$this->vars['form'] = parent::iterate_tmpl('webmoney',__CLASS__,strtolower($output),$vars);
+        $vars['signature'] = Model::Demand()->createSignature($P);
 
-        return $this->vars;
+		$this->vars['form'] = $this->iterate_tmpl('webmoney',__CLASS__,strtolower($output),array_merge($vars,$P));
+
+        return $this;
     }
 }
 

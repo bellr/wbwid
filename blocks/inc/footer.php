@@ -1,15 +1,14 @@
 <?
 class footer extends TemplateWidgets {
 
-    function __construct($action_method,$vars) {
-        $this->$action_method();
-    }
+    public function block() {
 
-    private function block() {
-        $default_wmid = Config::$wmBase['default_wmid'];
+        $PP = Extension::Payments()->getParam('payments','webmoney');
+
+        $default_wmid = $PP->default_wmid;
 		$this->vars['date'] = date('Y');
-        $this->vars['wmid'] = Config::$wmBase[$default_wmid];
+        $this->vars['wmid'] = $PP->$default_wmid;
 
-        return $this->vars;
+        return $this;
     }
 }

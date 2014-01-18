@@ -1,0 +1,12 @@
+<form  name="check_support" onSubmit="ajaxVs({url:'/widget/', block:'process',act:'info.support',p:serialize(this),callback:'appendTo'}); return false;">
+    <input type="hidden" name="owner_id" value="{owner_id}" />
+    <input type="hidden" name="action" value="{action}" />
+{email}
+    <div class="input">
+        <span class="title mes">{L_message}:</span> <textarea cols="60" rows="10"  maxlength="1020" name="message" placeholder="{placeholder}"></textarea>
+    </div>
+    <div class="input btn">
+        <button class="button_yellow">{L_send_message}</button>
+    </div>
+</form>
+<div class="red">* {L_all_requare}</div><br>

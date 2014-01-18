@@ -1,11 +1,9 @@
 <?
 class creat_demand extends TemplateWidgets {
-    function __construct($action_method,$vars=array()) {
-        $this->$action_method($vars);
-    }
 
-    private function block($vars) {
-        $P = inputData::init();
+    public function block($P) {
+
+        $PP = (array)Extension::Payments()->getParam('payments');
 
 		if(empty($P->object)) {Browser::go404();}
             switch($P->controller) {
@@ -27,8 +25,11 @@ class creat_demand extends TemplateWidgets {
 
                 case 'oplata':
 
-                    $obj = Model::Uslugi($P->object);
-                    $path_kurs = isset($obj->prop['alias_kurs']) ? $obj->prop['alias_kurs'] : 'usluga';
+                    $uslugi = Model::Uslugi()->get(array(
+                        'alias_url' => $P->object
+                    ));
+
+                    $path_kurs = isset($uslugi['alias_kurs']) ? $uslugi['alias_kurs'] : 'usluga';
                     $direction = $P->oplata.'_'.$path_kurs;
 
                     $u = dataBase::DBexchange()->select('kurs','konvers,direct',"where direction='{$direction}'");
@@ -36,8 +37,8 @@ class creat_demand extends TemplateWidgets {
                     $com_seti = $info_input[0]["com_seti"];
                     $this->vars['type_cur'] = $P->oplata;
                     $this->vars['ex_in'] = 'usluga';
-                    $this->vars['desc_val_in'] = Config::$wmBase['by_nal'];
-                    $balance = Model::Balance()->getPurseService();
+                    $this->vars['desc_val_in'] = $PP['by_nal'];
+                    $balance = Model::Balance('HOME')->getPurseService();
                     $this->vars['name_uslugi'] = $tmpl = $P->object;
 
 
@@ -61,8 +62,8 @@ class creat_demand extends TemplateWidgets {
                     $direction = 'NAL_'.$P->object;
 
                     $input = $this->vars['input'] = $P->object;
-                    $this->vars['tile_form'] = $vars['L_title_refill'];
-                    $this->vars['type_cur'] = Config::$wmBase['by_nal'];
+                    $this->vars['tile_form'] = $P->vars['L_title_refill'];
+                    $this->vars['type_cur'] = $PP['by_nal'];
                     $info_input = dataBase::DBexchange()->select('balance','balance,desc_val,com_seti',"where name='{$input}'");
                     $this->vars['desc_val_in'] = $info_input[0]['desc_val'];
                     $u = dataBase::DBexchange()->select('kurs','konvers,direct',"where direction='{$direction}'");
@@ -82,8 +83,8 @@ class creat_demand extends TemplateWidgets {
 
                     $this->vars['input'] = $input = $d[0];
                     $this->vars['currency'] = $d[1];
-                    $this->vars['tile_form'] = $vars['L_title_refill'];
-                    $this->vars['type_cur'] = Config::$wmBase['by_nal'];
+                    $this->vars['tile_form'] = $P->vars['L_title_refill'];
+                    $this->vars['type_cur'] = $PP['by_nal'];
 
                     $info_input = dataBase::DBpaydesk()->select('uslugi','desc_val',"where name='{$d[0]}'");
                     $this->vars['desc_uslugi'] = $info_input[0]['desc_val'];
@@ -102,7 +103,7 @@ class creat_demand extends TemplateWidgets {
             $this->vars['desc_val_out'] = $info_output[0]['desc_val'];
             $this->vars['format_balance'] = number_format($balance, 2, '.', ' ');
             $this->vars['email'] = Cookies::get('email');
-            $this->vars['Constructor'] = sConstructor::check($output,$input);
+            $this->vars['Constructor'] = swConstructor::check($output,$input);
             $this->vars['direct'] = $u[0]["direct"];
             $this->vars['konvers'] = $u[0]["konvers"];
             $this->vars['comission'] = $com_seti;
@@ -110,11 +111,11 @@ class creat_demand extends TemplateWidgets {
             $this->vars['controller'] = $P->controller;
 
             $this->tmplName = $this->vars['type_operation'] = $P->controller;
-        return $this->vars;
+
+        return $this;
     }
 
-    private function process($vars) {
-        $P = inputData::init();
+    public function process($P) {
 
         sValidate::Limit('max','inval',$P->ex_out,$P->in_val,'L_max_inval');
         sValidate::Limit('min','inval',$P->ex_out,$P->in_val,'L_min_inval');
@@ -125,22 +126,29 @@ class creat_demand extends TemplateWidgets {
         sValidate::isNumeric($P->in_val);
         if(isset($P->wmid)) {sValidate::isIntWidth($P->wmid,12,'L_bad_wmid');}
         if(isset($P->p_output)) {sValidate::Purse($P->p_output,$P->ex_out);}
-        if(isset($P->p_input)) {sValidate::Purse($P->p_input,$P->ex_in);}
+
+        if(isset($P->p_input)) {
+        	sValidate::Purse($P->p_input,$P->ex_in);
+            if($P->p_input == '32943732' || $P->p_input == 'R399580357066' || $P->p_input == '45304567') {
+                sValidate::$code = 1; sValidate::$message = 'Внимание! Возможно владелец этого счета мошенник!';
+            }
+        }
+
         sValidate::Email($P->email);
-        sValidate::Balance($P->ex_in,$P->out_val,$P->currency);
+        swValidate::Balance($P->ex_in,$P->out_val,$P->currency);
         sValidate::checkBox($P->rules,'L_error_checkbox');
 
         if(!sValidate::$code) {
             $direction = $P->ex_out.'_'.$P->ex_in;
 
-            $in_val = Model::Kurs()->checkKurs($direction,$P->out_val,$P->in_val,$P->ex_out);
+            $in_val = Model::Kurs('HOME')->checkKurs($direction,$P->out_val,$P->in_val,$P->ex_in);
             if(!empty($in_val)) {$P->out_val = $in_val;}
 
             switch($P->type_operation) {
 
                 case 'exchange':
 
-                    $data['did'] = $did = sFormatData::wm_ReqID();
+                    $data['did'] = $did = swDemand::wm_ReqID();
                     $data['ex_output'] = $P->ex_out;
                     $data['ex_input'] = $P->ex_in;
                     $data['out_val'] = $P->in_val;
@@ -159,9 +167,10 @@ class creat_demand extends TemplateWidgets {
                     Cookies::set('email',$P->email);
 
                     break;
+
                 case 'oplata':
 
-                    $data['did'] = $did = sFormatData::wm_ReqID();
+                    $data['did'] = $did = swDemand::wm_ReqID();
                     $data['output'] = $P->ex_out;
                     $data['name_uslugi'] = $P->name_uslugi;
                     $data['purse_out'] = $P->p_output;
@@ -174,7 +183,7 @@ class creat_demand extends TemplateWidgets {
                     $data['add_date'] = time();
                     $data['partner_id'] = Cookies::get('partner_id');
 
-                    Model::Demand()->insert($did,'demand_uslugi',$data);
+                    Model::Demand('HOME')->insert($did,'demand_uslugi',$data);
                     Cookies::set('wmid',$P->wmid);
                     Cookies::set($P->name_uslugi.'_1',$P->pole1);
                     Cookies::set($P->name_uslugi.'_2',$P->pole2);
@@ -183,7 +192,7 @@ class creat_demand extends TemplateWidgets {
                     break;
                 case 'refill':
 
-                    $data['did'] = $did = sFormatData::wm_ReqID();
+                    $data['did'] = $did = swDemand::wm_ReqID();
                     $data['output'] = 'pochta';
                     $data['input'] = $P->ex_in;
                     $data['purse_in'] = $P->p_input;
@@ -203,7 +212,7 @@ class creat_demand extends TemplateWidgets {
                     break;
                 case 'deposit_forex':
 
-                    $data['did'] = $did = sFormatData::wm_ReqID();
+                    $data['did'] = $did = swDemand::wm_ReqID();
                     $data['output'] = 'pochta';
                     $data['input'] = $P->ex_in.'_'.$P->currency;
                     $data['purse_in'] = $P->p_input;
@@ -225,8 +234,8 @@ class creat_demand extends TemplateWidgets {
 
             $mail = mailSender::init();
             $mail->to = $P->email;
-            $mail->subject = "[WM-RB.net] ".$vars['L_subject_mail'];
-            $mail->message = parent::iterate_tmpl('emails',Config::getLang(),__CLASS__.$type,array(
+            $mail->subject = '[WM-RB.net] '.$P->vars['L_subject_mail'];
+            $mail->message = $this->iterate_tmpl('emails',Config::getLang(),__CLASS__.$type,array(
                 'bottom_support' => parent::iterate_tmpl('emails',Config::getLang(),'bottom_support'),
                 'did' => $did,
                 'HOME_URL'=>Config::$base[PROJECT.'_URL']
@@ -238,7 +247,7 @@ class creat_demand extends TemplateWidgets {
             sValidate::$code = 1; $message = sValidate::$message;
         }
 
-        echo json_encode(array('status'=>sValidate::$code,'message'=>$message,'html'=>$html));
+        return json_encode(array('status'=>sValidate::$code,'message'=>$message,'html'=>$html));
     }
 }
 

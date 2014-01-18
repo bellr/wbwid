@@ -1,13 +1,9 @@
 <?
 class header extends Template {
-    function __construct($action_method,$vars='') {
 
-        $this->$action_method();
-    }
+    public function block() {
 
-    private function block() {
-
-        return $this->vars = $vars;
+        return $this;
     }
 }
 

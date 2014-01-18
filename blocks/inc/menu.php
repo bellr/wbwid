@@ -1,11 +1,7 @@
 <?
 class menu extends TemplateWidgets {
 
-    function __construct($action_method,$vars) {
-        $this->$action_method();
-    }
-
-    private function block() {
+    public function block() {
         $currency = dataBase::DBexchange()->select('balance','name,desc_val','where st_cash=1');
 
         foreach($currency as $cur) {
@@ -27,6 +23,6 @@ class menu extends TemplateWidgets {
             $this->vars['items_forex'] .= parent::iterate_tmpl('inc',__CLASS__,'item_refill_forex',$cur);
         }
 
-        return $this->vars;
+        return $this;
     }
 }

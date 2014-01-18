@@ -1,8 +1,8 @@
 <div align="center" class="hidden" id="load"></div>
-        <form method="post" onsubmit="ajaxVs({block:'gcontrol',act:'CheckPayment.checkPayEasypay',p:serialize(this)}); return false;">
+        <form method="post" onsubmit="ajaxVs({url:'/widget/',block:'process',act:'exchanger.show_demand',p:serialize(this)}); return false;">
             <input type="hidden" name="did" value="{did}" />
+            <input type="hidden" name="type_action" value="{type_action}" />
+            <input type="hidden" name="output_system" value="{output_system}" />
             <input type="hidden" name="hesh_easypay" value="{hesh_easypay}" />
-           <input type="submit" class="button_yellow" value="{L_check_pay}" />
+           <input type="submit" name="send" class="button_yellow" value="{L_check_pay}" />
         </form>
-<!--button class="button_yellow" id="submit_check" onclick="checkPayExchEP('check_pay_exch','{did}','{hesh_easypay}')"  onclick='hide_box("load")'>Проверить оплату</button-->
-<!--button class="button_yellow" id="submit_check" onclick="ajaxVs({block:'gcontrol',act:'BillPayment.billWM',p:serialize(this)});"  onclick='hide_box("load")'>Проверить оплату</button-->
