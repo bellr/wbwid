@@ -27,7 +27,7 @@ class registration extends TemplateWidgets {
             Browser::go();
         }
 
-        return $this->vars;
+        return $this;
     }
 
     public function process($P) {

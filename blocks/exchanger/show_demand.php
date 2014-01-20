@@ -81,8 +81,11 @@ class show_demand extends TemplateWidgets {
                     break;
 
                 case 'oplata':
+				
                     $demand_info = dataBase::DBpaydesk()->select('demand_uslugi','*','where did='.$P->did);
+					
                     if (!empty($demand_info)) {
+					
                         $purse = dataBase::DBexchange()->select('balance','purse,desc_val',"where name='".$demand_info[0]['output']."'");
                         $us = dataBase::DBpaydesk()->select('uslugi','name_cat,desc_val','where status=1 and alias_url="'.$demand_info[0]['name_uslugi'].'"');
                         $demand_info[0]['desc_uslugi'] = $us[0]['desc_val'];
@@ -201,11 +204,8 @@ class show_demand extends TemplateWidgets {
     public function process($P) {
 
         $status = 0;
-//d($P);
+
         sValidate::isIntWidth($P->did,10,'L_bad_did');
-//BillPayment.billWM
-        //1388735773
-        //Extension::Payments()->getParam('payments','easypay');
 
         switch($P->type_action) {
 
@@ -232,7 +232,12 @@ class show_demand extends TemplateWidgets {
 
                         if($signature == $P->signature) {
 
-                            $result = Vitalis::Controller('BillPayment','billWM',$demand[0],'gc');
+                            $result = Vitalis::Controller('BillPayment','billWM',array_merge((array)$P,array(
+								'purse_type' => $demand[0]['ex_output'],
+								'amount' => $demand[0]['out_val'],
+								'desc' => "Direction of the exchange: {$demand[0]['ex_output']}->{$demand[0]['ex_input']}, ID:{$P->did}",
+								'direct' => $demand[0]['ex_output'].'_'.$demand[0]['ex_input']
+							)),'gc');
 
                         } else {
                             $result['status'] = 1; $result['message'] = Config::$sysMessage['L_error_signature'];
@@ -248,6 +253,53 @@ class show_demand extends TemplateWidgets {
 
                 break;
 
+			case 'oplata':
+/*
+			$demand = dataBase::DBpaydesk()->select('demand_uslugi','*','where did='.$P->did);
+
+			if(!empty($demand)) {
+
+				if($P->output_system == 'EasyPay') {
+
+					$result = Vitalis::Controller('CheckPayment','checkPaymentEasypay',$demand[0],'gc');
+					$curl = Extension::Rest(Config::$base['HOME_URL'].'/api/CheckPayment/checkPaymentEasypay/');
+			        $curl->post($demand[0]);
+			        $curl->execute();
+
+				} elseif($P->output_system == 'WMT') {
+
+					 $signature = Model::Demand()->createSignature(array(
+						'output' => $demand[0]['ex_output'],
+						'input' => $demand[0]['ex_input'],
+						'in_val' => $demand[0]['in_val'],
+						'out_val' => $demand[0]['out_val'],
+						'id_pay' => $P->pay_id,
+						'did' => $P->did
+					));
+
+					if($signature == $P->signature) {
+
+						$result = Vitalis::Controller('BillPayment','billWM',array_merge((array)$P,array(
+							'purse_type' => $demand[0]['ex_output'],
+							'amount' => $demand[0]['out_val'],
+							'desc' => "Direction of the exchange: {$demand[0]['ex_output']}->{$demand[0]['ex_input']}, ID:{$P->did}",
+							'direct' => $demand[0]['ex_output'].'_'.$demand[0]['ex_input']
+						)),'gc');
+
+					} else {
+						$result['status'] = 1; $result['message'] = Config::$sysMessage['L_error_signature'];
+					}
+
+				}
+
+			} else {
+				$result['status'] = 1; $result['message'] = Config::$sysMessage['L_pay_paid'];
+			}
+
+			return json_encode($result);
+*/
+			break;
+				
             case 'refill':
 
                 if(!sValidate::$code) {
