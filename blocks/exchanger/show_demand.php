@@ -232,7 +232,7 @@ class show_demand extends TemplateWidgets {
 
                         if($signature == $P->signature) {
 
-                            $result = Vitalis::Controller('BillPayment','billWM',array_merge((array)$P,array(
+                            return $result = Vitalis::Controller('BillPayment','billWM',array_merge((array)$P,array(
                                 'type_action'   => 'demand',
 								'purse_type' => $demand[0]['ex_output'],
 								'amount' => $demand[0]['out_val'],
@@ -256,7 +256,7 @@ class show_demand extends TemplateWidgets {
 
 			case 'oplata':
 
-			$demand = dataBase::DBpaydesk()->select('demand_uslugi','*','where did='.$P->did);
+			$demand = dataBase::DBpaydesk()->select('demand_uslugi','*',"where did={$P->did} and status='n'");
 
 			if(!empty($demand)) {
 
@@ -290,7 +290,8 @@ class show_demand extends TemplateWidgets {
                             'desc'          => "Payment facilities: {$demand[0]['name_uslugi']}, ID:{$demand[0]['did']}",
                             'direct'        => $demand[0]['output'].'_'.$demand[0]['name_uslugi']
                         ));
-                        $result = $curl->execute();
+
+                        return $curl->execute();
 
 					} else {
 						$result['status'] = 1; $result['message'] = Config::$sysMessage['L_error_signature'];
