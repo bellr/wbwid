@@ -115,15 +115,15 @@ class show_demand extends TemplateWidgets {
                             }
 
                             $submit = Vitalis::tmpl('Widgets')->load_tmpl_block('webmoney.paramerty_payment',array(
-                                'output'=>$demand_info[0]["output"],
-                                'input'=>$demand_info[0]["ex_input"],
-                                'in_val'=>$demand_info[0]["in_val"],
-                                'purse_out'=>$purse_out,
-                                'purse_in'=>$demand_info[0]["purse_in"],
-                                'out_val'=>$demand_info[0]["out_val"],
-                                'id_pay'=>$sel_idpay[0]["id_pay"],
-                                'desc_pay'=>$desc_pay,
-                                'did'=>$P->did,
+                                'output'    => $demand_info[0]["output"],
+                                'input'     => $demand_info[0]["name_uslugi"],
+                                'in_val'    => $demand_info[0]["out_val"],
+                                'out_val'   => $demand_info[0]["in_val"],
+                                'purse_out' => $purse_out,
+                                'purse_in'  => $demand_info[0]["purse_in"],
+                                'id_pay'    => $sel_idpay[0]["id_pay"],
+                                'desc_pay'  => $desc_pay,
+                                'did'       => $P->did,
                                 'type_action'=>'oplata'
                             ));
                         }
@@ -233,6 +233,7 @@ class show_demand extends TemplateWidgets {
                         if($signature == $P->signature) {
 
                             $result = Vitalis::Controller('BillPayment','billWM',array_merge((array)$P,array(
+                                'type_action'   => 'demand',
 								'purse_type' => $demand[0]['ex_output'],
 								'amount' => $demand[0]['out_val'],
 								'desc' => "Direction of the exchange: {$demand[0]['ex_output']}->{$demand[0]['ex_input']}, ID:{$P->did}",
@@ -254,37 +255,42 @@ class show_demand extends TemplateWidgets {
                 break;
 
 			case 'oplata':
-/*
+
 			$demand = dataBase::DBpaydesk()->select('demand_uslugi','*','where did='.$P->did);
 
 			if(!empty($demand)) {
 
 				if($P->output_system == 'EasyPay') {
 
-					$result = Vitalis::Controller('CheckPayment','checkPaymentEasypay',$demand[0],'gc');
 					$curl = Extension::Rest(Config::$base['HOME_URL'].'/api/CheckPayment/checkPaymentEasypay/');
 			        $curl->post($demand[0]);
-			        $curl->execute();
+                    $result = $curl->execute();
 
 				} elseif($P->output_system == 'WMT') {
 
-					 $signature = Model::Demand()->createSignature(array(
-						'output' => $demand[0]['ex_output'],
-						'input' => $demand[0]['ex_input'],
-						'in_val' => $demand[0]['in_val'],
-						'out_val' => $demand[0]['out_val'],
+					 $signature = Model::Demand('HOME')->createSignature(array(
+						'output' => $demand[0]['output'],
+						'input' => $demand[0]['name_uslugi'],
+						'in_val' => $demand[0]['out_val'],
+						'out_val' => $demand[0]['in_val'],
 						'id_pay' => $P->pay_id,
 						'did' => $P->did
 					));
 
 					if($signature == $P->signature) {
 
-						$result = Vitalis::Controller('BillPayment','billWM',array_merge((array)$P,array(
-							'purse_type' => $demand[0]['ex_output'],
-							'amount' => $demand[0]['out_val'],
-							'desc' => "Direction of the exchange: {$demand[0]['ex_output']}->{$demand[0]['ex_input']}, ID:{$P->did}",
-							'direct' => $demand[0]['ex_output'].'_'.$demand[0]['ex_input']
-						)),'gc');
+                        $curl = Extension::Rest(Config::$base['HOME_URL'].'/api/BillPayment/billWM/');
+                        $curl->post(array(
+                            'did'           => $P->did,
+                            'pay_id'        => $P->pay_id,
+                            'wmid'          => $P->wmid,
+                            'type_action'   => $P->type_action,
+                            'purse_type'    => $demand[0]['output'],
+                            'amount'        => $demand[0]['out_val'],
+                            'desc'          => "Payment facilities: {$demand[0]['name_uslugi']}, ID:{$demand[0]['did']}",
+                            'direct'        => $demand[0]['output'].'_'.$demand[0]['name_uslugi']
+                        ));
+                        $result = $curl->execute();
 
 					} else {
 						$result['status'] = 1; $result['message'] = Config::$sysMessage['L_error_signature'];
@@ -297,7 +303,7 @@ class show_demand extends TemplateWidgets {
 			}
 
 			return json_encode($result);
-*/
+
 			break;
 				
             case 'refill':
