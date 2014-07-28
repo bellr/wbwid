@@ -77,7 +77,6 @@ class swConstructor {
             break; endswitch;
         return $result;
     }
-    
     //Название формы отправки в cheak_demand
     private static function go_name_submit($disp_var) {
         switch ($disp_var[0]) :

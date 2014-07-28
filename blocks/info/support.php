@@ -1,6 +1,11 @@
 <?
 class support extends TemplateWidgets {
 
+    public function add($P) {
+
+        return $this->block($P);
+    }
+
     public function block($P) {
 
         if($P->controller != 'support' || empty($P->object)) {

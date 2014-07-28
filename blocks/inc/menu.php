@@ -2,12 +2,12 @@
 class menu extends TemplateWidgets {
 
     public function block() {
-        $currency = dataBase::DBexchange()->select('balance','name,desc_val','where st_cash=1');
+        /*$currency = dataBase::DBexchange()->select('balance','name,desc_val','where st_cash=1');
 
         foreach($currency as $cur) {
             $cur['type'] = 'refill';
             $this->vars['items'] .= parent::iterate_tmpl('inc',__CLASS__,'item_refill',$cur);
-        }
+        }*/
 
         $currency = dataBase::DBpaydesk()->select('uslugi','name,desc_val','where name_cat="forex" and status=1');
         $instaforex = array('USD','RUR','EUR');

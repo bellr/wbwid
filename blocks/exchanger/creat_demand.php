@@ -142,7 +142,7 @@ class creat_demand extends TemplateWidgets {
             $direction = $P->ex_out.'_'.$P->ex_in;
 
             $in_val = Model::Kurs('HOME')->checkKurs($direction,$P->out_val,$P->in_val,$P->ex_in);
-            if(!empty($in_val)) {$P->out_val = $in_val;}
+            if(isset($in_val)) {$P->out_val = $in_val;}
 
             switch($P->type_operation) {
 
