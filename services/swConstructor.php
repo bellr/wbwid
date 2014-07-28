@@ -321,11 +321,6 @@ public static function cur_input($input,$purse_in) {
             case ("EasyPay") :
                 $html = "
 <tr class=\"text\" bgColor=\"#ffffff\">
-	<td align=\"right\">Ваш WMID :&nbsp;<br>
-</td>
-<td align=\"left\">
-	<input type=\"text\" name=\"wmid\" id=\"wmid\" maxlength=\"12\" value=\"{$wmid}\" size=\"14\">
-</td>
 </tr>
 <tr class=\"text\" bgColor=\"#ffffff\">
 	<td align=\"right\">Ваш EasyPay счет :&nbsp;<br>
