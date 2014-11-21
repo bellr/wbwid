@@ -1,6 +1,14 @@
 <?
 class show_demand extends TemplateWidgets {
 
+    public function title_form($P) {
+
+        $this->block($P);
+
+        return $this;
+
+    }
+
     public function block($P) {
 
         $P->did = $this->vars['did'] = !empty($P->vars['did']) ? $P->vars['did'] : $P->did;
@@ -12,65 +20,69 @@ class show_demand extends TemplateWidgets {
             switch($P->oper_type) {
 
                 case 'exchange':
-                    $demand_info = dataBase::DBexchange()->select('demand','*','where did='.$P->did);
 
-                    if (!empty($demand_info)) {
+                    $demand = Model::Demand('HOME')->getInfo(array('did' => $P->did),'demand');
+
+                    if (!empty($demand)) {
                         //вывод кошелька на кот. будет выполняться перевод
-                        $purse = dataBase::DBexchange()->select('balance','purse,desc_val',"where name='".$demand_info[0]['ex_output']."'");
-                        $desc_pay = "Direction of the exchange: {$demand_info[0]['ex_output']}->{$demand_info[0]['ex_input']}, ID:{$demand_info[0]['did']}";
-                        $cur_in_info = dataBase::DBexchange()->select('balance','desc_val',"where name='".$demand_info[0]["ex_input"]."'");
+                        $purse = dataBase::DBexchange()->select('balance','purse,desc_val',"where name='".$demand['ex_output']."'");
+                        $cur_in_info = dataBase::DBexchange()->select('balance','desc_val',"where name='".$demand["ex_input"]."'");
 
-                        $out_val = $demand_info[0]['out_val'];
-                        //$demand_info[0]['out_val'] = number_format(round($out_val), 2, '.', ' ');
-                        //$demand_info[0]['in_val'] = number_format($demand_info[0]['in_val'], 2, '.', ' ');
-                        $demand_info[0]['add_date'] = date('d.m.Y H:i:s',$demand_info[0]['add_date']);
+                        $out_val = $demand['out_val'];
+                        //$demand['out_val'] = number_format(round($out_val), 2, '.', ' ');
+                        //$demand['in_val'] = number_format($demand['in_val'], 2, '.', ' ');
+                        $demand['add_date'] = date('d.m.Y H:i:s',$demand['add_date']);
 
-                        if(!empty($demand_info[0]["coment"]) && $demand_info[0]['status'] != 'y') {
-                            $demand_info[0]['comment'] = parent::iterate_tmpl('exchanger',__CLASS__,'comment',array('comment'=>$demand_info[0]['coment']));
+                        if(!empty($demand["coment"]) && $demand['status'] != 'y') {
+                            $demand['comment'] = parent::iterate_tmpl('exchanger',__CLASS__,'comment',array('comment'=>$demand['coment']));
                         }
 
-                        if ($demand_info[0]["status"] == "n") {
+                        if ($demand["status"] == "n") {
 
                             $sel_idpay = dataBase::DBadmin()->select('id_payment','id_pay',"where did=".$P->did);
 
-                            if($demand_info[0]['ex_output'] == "EasyPay") {
+                            if($demand['ex_output'] == "EasyPay") {
 
-                                $purse_out = $demand_info[0]["purse_out"];
-                                $demand_info[0]['out_val'] = number_format(round($out_val), 0, '.', ' ');
+                                $purse_out = $demand["purse_out"];
+                                $demand['out_val'] = number_format(round($out_val), 0, '.', ' ');
 
                             } else {
                                 $purse_out = $purse[0]['purse'];
                             }
 
+                            $PP = Extension::Payments()->getParam('payments');
+
                             $submit = Vitalis::tmpl('Widgets')->load_tmpl_block('webmoney.paramerty_payment',array(
-                                'output'=>$demand_info[0]["ex_output"],
-                                'input'=>$demand_info[0]["ex_input"],
-                                'in_val'=>$demand_info[0]["in_val"],
+                                'output'=>$demand["ex_output"],
+                                'input'=>$demand["ex_input"],
+                                'in_val'=>$demand["in_val"],
                                 'purse_out'=>$purse_out,
-                                'purse_in'=>$demand_info[0]["purse_in"],
-                                'out_val'=>$demand_info[0]["out_val"],
+                                'purse_in'=>$demand["purse_in"],
+                                'out_val'=>$demand["out_val"],
                                 'id_pay'=>$sel_idpay[0]["id_pay"],
-                                'desc_pay'=>$desc_pay,
+                                'desc_pay' => swConstructor::descriptionPayment($P->oper_type,$demand),
                                 'did'=>$P->did,
-                                'type_action'=>'exchange'
+                                'type_action'=>'exchange',
+                                'url_wm_merchant' => $PP->url_wm_merchant
                             ));
+
                         }
 
                         $instruction = $this->load_tmpl_block('info.instruction',array(
                             'oper_type'     => $P->oper_type,
-                            'status'        => $demand_info[0]["status"],
-                            'ex_output'     => $demand_info[0]["ex_output"],
+                            'status'        => $demand["status"],
+                            'ex_output'     => $demand["ex_output"],
                             'edit_out_val'  => $out_val,
                         ));
 
-                        $demand_info[0]['status_name'] = swDemand::$status_name[$demand_info[0]["status"]];
-                        $demand_info[0]['status_class'] = swDemand::$status_class[$demand_info[0]["status"]];
-                        $this->vars['html'] = parent::iterate_tmpl('exchanger',__CLASS__,'exchange_form',array_merge($demand_info[0],array(
+                        $demand['status_name'] = swDemand::$status_name[$demand["status"]];
+                        $demand['status_class'] = swDemand::$status_class[$demand["status"]];
+                        $this->vars['html'] = parent::iterate_tmpl('exchanger',__CLASS__,'exchange_form',array_merge($demand,array(
                             'purse'=>$purse[0]['purse'],
                             'purse_desc_val' =>$purse[0]['desc_val'],
                             'cur_in_info' => $cur_in_info[0]['desc_val'],
-                            'cur_output' => swConstructor::cur_output($demand_info[0]["ex_output"],$demand_info[0]["purse_out"]),
-                            'cur_input' => swConstructor::cur_input($demand_info[0]["ex_input"],$demand_info[0]["purse_in"]),
+                            'cur_output' => swConstructor::cur_output($demand["ex_output"],$demand["purse_out"]),
+                            'cur_input' => swConstructor::cur_input($demand["ex_input"],$demand["purse_in"]),
                             'submit' => $submit,
                             'instruction'=>$instruction
                         )));

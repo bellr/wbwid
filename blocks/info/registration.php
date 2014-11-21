@@ -81,8 +81,9 @@ class registration extends TemplateWidgets {
 
             break;
             case 'mess_pass';
+
                 sValidate::Email($P->email);
-                $p = explode("@",$P->email);
+                $user = explode("@",$P->email);
 
                 if(!sValidate::$code) {
                     $dubl = dataBase::DBmain()->select('partner',
@@ -96,7 +97,7 @@ class registration extends TemplateWidgets {
                         $mail->to = $P->email;
                         $mail->subject = "[WM-RB.net] ".$P->vars['L_mail_repass'];
                         $mail->message = parent::iterate_tmpl('emails',Config::getLang(),'re_pass',array(
-                            'username' => $p[0],
+                            'username' => $user[0],
                             'bottom_support' => parent::iterate_tmpl('emails',Config::getLang(),'bottom_support'),
                             'pass' => $pass
                         ));

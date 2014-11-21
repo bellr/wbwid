@@ -1,0 +1,35 @@
+<script language='JavaScript'>
+    function Check_wmid(){
+        if (!document.f_wmid.wmid.value.match('^[0-9]{12}$')) {
+            alert('Номер WMID указан не верно');
+            document.f_wmid.wmid.focus();
+            return false;
+        }
+    }
+    /*function Check_ep(){
+        if (!document.f_ep.purse.value.match('^[0-9]{8}$')) {
+            alert('Номер EasyPay кошелька указан не верно');
+            document.f_ep.purse.focus();
+            return false;
+        }
+    }*/
+
+</script>
+
+
+<div class="input_form">
+    <form name="f_wmid" id="f_wmid" method="post" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'exchanger.show_demand',p:serialize(this)}); return false;">
+        <b>Введите Ваш WMID :</b> <input type="text" name="wmid" id="wmid" maxlength="12" value="{wmid}" size="13">
+        <input type="hidden" name="type_action" value="{type_action}" />
+        <input type="hidden" name="output_system" value="{output_system}" />
+        <input type="hidden" name="did" value="{did}" />
+        <input type="hidden" name="signature" value="{signature}" />
+        <input type="hidden" name="pay_id" value="{id_pay}" />
+        <button class="button_yellow">{L_bill_pay}</button>
+    </form><br />
+    <div class="div_operok">После выписки счета у Вас есть 20 минут, что бы оплатить заявку.<br />В противном случае счет будет не действительным!<br />
+        Ваша заявка будет выполнена в течении 10 минут после оплаты.</div>
+</div>
+
+
+
