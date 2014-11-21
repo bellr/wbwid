@@ -22,6 +22,27 @@ class swConstructor {
         return $result;
     }
 
+    public static function descriptionPayment($operation_type,$demand_info) {
+
+        switch ($operation_type) :
+
+            case ('exchange') :
+
+                $description = "Direction of the exchange: {$demand_info['ex_output']} ({$demand_info['out_val']}) -> {$demand_info['ex_input']} ({$demand_info['in_val']}), ID:{$demand_info['did']}";
+
+                break;
+
+            case ("output_NAL") :
+
+              //  $result = '<b>'.Config::$infoText['L_replen_card'].' {$name_usluga}</b>';
+
+                break;
+
+        endswitch;
+
+        return $description;
+    }
+
     public static function go_output($disp_var,$oplata) {
         switch ($disp_var) :
             case ("NAL") :

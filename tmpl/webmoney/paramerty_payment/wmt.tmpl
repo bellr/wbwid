@@ -32,14 +32,14 @@
     <form style='margin-left:10px;' name='select_box' id='select_box'>
         <b>Выберите метод оплаты :</b>
         <select name='f_boxPay' id='f_boxPay'  onclick='boxPay()' onSelect='boxPay()' onFocus='boxPay()' onSelect='boxPay()' onKeyUp='boxPay()' onChange='boxPay()'>
-            <option value='extract'>Выписка счета</option>
-            <!--option value='direct' selected='selected'>Прямой платеж</option-->
+            <!--option value='extract'>Выписка счета</option-->
+            <option value='direct' selected='selected'>Прямой платеж</option>
         </select>
     </form>
 </div>
 <br />
-<div id='box_derect' style='display: none;' class='input_form'>
-    <form method="post" action="https://merchant.webmoney.ru/lmi/payment.asp">
+<div id='box_derect' class='input_form'>
+    <form method="post" action="{url_wm_merchant}">
         <input type="hidden" name="ex_output" value="{output}" />
         <input type="hidden" name="ex_input" value="{input}" />
         <input type="hidden" name="inval" value="{in_val}" />
@@ -52,7 +52,7 @@
         <button name="ex_wm" class="button_yellow" type="submit">Оплатить</button>
         </form></div>
 
-<div id="box_extract"  class="input_form">
+<div id="box_extract" style='display: none;' class="input_form">
     <form name="f_wmid" id="f_wmid" method="post" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'exchanger.show_demand',p:serialize(this)}); return false;">
         <b>Введите Ваш WMID :</b> <input type="text" name="wmid" id="wmid" maxlength="12" value="{wmid}" size="13">
         <input type="hidden" name="type_action" value="{type_action}" />
@@ -60,12 +60,6 @@
         <input type="hidden" name="did" value="{did}" />
         <input type="hidden" name="signature" value="{signature}" />
         <input type="hidden" name="pay_id" value="{id_pay}" />
-        <!--input type="hidden" name="purse_type" value="{output}" />
-        <input type="hidden" name="direct" value="{output}_{input}" />
-
-        <input type="hidden" name="amount" value="{out_val}" />
-        <input type="hidden" name="desc" value="{desc_pay}" />
-        <input type="hidden" name="bill_pay" value="1"--><br /><br />
         <button class="button_yellow">{L_bill_pay}</button>
     </form><br />
     <div class="div_operok">После выписки счета у Вас есть 20 минут, что бы оплатить заявку.<br />В противном случае счет будет не действительным!<br />
