@@ -23,6 +23,7 @@ class show_demand extends TemplateWidgets {
 
                     $demand = Model::Demand('HOME')->getInfo(array('did' => $P->did),'demand');
 
+
                     if (!empty($demand)) {
                         //вывод кошелька на кот. будет выполняться перевод
                         $purse = dataBase::DBexchange()->select('balance','purse,desc_val',"where name='".$demand['ex_output']."'");
@@ -248,7 +249,7 @@ class show_demand extends TemplateWidgets {
                                 'type_action'   => 'demand',
 								'purse_type' => $demand[0]['ex_output'],
 								'amount' => $demand[0]['out_val'],
-								'desc' => "Direction of the exchange: {$demand[0]['ex_output']}->{$demand[0]['ex_input']}, ID:{$P->did}",
+								'desc' => "Внимание! Если вы не выписывали счет не оплачивайте! Direction of the exchange: {$demand[0]['ex_output']}->{$demand[0]['ex_input']}, ID:{$P->did}",
 								'direct' => $demand[0]['ex_output'].'_'.$demand[0]['ex_input']
 							)),'gc');
 
@@ -347,5 +348,3 @@ class show_demand extends TemplateWidgets {
         return json_encode(array('status'=>$status,'message'=>$message));
     }
 }
-
-?>
