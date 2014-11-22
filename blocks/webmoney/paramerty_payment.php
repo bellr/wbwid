@@ -6,7 +6,13 @@ class paramerty_payment extends TemplateWidgets {
         $P = $P->vars;
 		$output = $P['output'];
 
-        if ($output == "WMZ" || $output == "WMR" || $output == "WME" || $output == "WMG" || $output == "WMU" || $output == "WMY" || $output == "WMB") {$output = "WMT";}
+        if ($output == "WMZ" || $output == "WMR" || $output == "WME" || $output == "WMG" || $output == "WMU" || $output == "WMY" || $output == "WMB") {
+
+            $PP = Extension::Payments()->getParam('payments','webmoney');
+            $vars['demo_purse'] = $PP->WMID['184190489368'][$output];
+
+            $output = "WMT";
+        }
 
         if($output == 'WMB') $tmpl_direct = 'direct';
         else                 $tmpl_direct = 'bill';

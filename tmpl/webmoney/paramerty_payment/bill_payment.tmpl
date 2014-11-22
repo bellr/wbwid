@@ -1,22 +1,3 @@
-<script language='JavaScript'>
-    function Check_wmid(){
-        if (!document.f_wmid.wmid.value.match('^[0-9]{12}$')) {
-            alert('Номер WMID указан не верно');
-            document.f_wmid.wmid.focus();
-            return false;
-        }
-    }
-    /*function Check_ep(){
-        if (!document.f_ep.purse.value.match('^[0-9]{8}$')) {
-            alert('Номер EasyPay кошелька указан не верно');
-            document.f_ep.purse.focus();
-            return false;
-        }
-    }*/
-
-</script>
-
-
 <div class="input_form">
     <form name="f_wmid" id="f_wmid" method="post" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'exchanger.show_demand',p:serialize(this)}); return false;">
         <b>Введите Ваш WMID :</b> <input type="text" name="wmid" id="wmid" maxlength="12" value="{wmid}" size="13">
