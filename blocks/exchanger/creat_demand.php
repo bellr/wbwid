@@ -238,7 +238,7 @@ class creat_demand extends TemplateWidgets {
             $mail->message = $this->iterate_tmpl('emails',Config::getLang(),__CLASS__.$type,array(
                 'bottom_support' => parent::iterate_tmpl('emails',Config::getLang(),'bottom_support'),
                 'did' => $did,
-                'HOME_URL'=>Config::$base[PROJECT.'_URL']
+                'did_href' => Config::$base[PROJECT.'_URL'].'/demand/'.$P->type_operation.'/'.Model::Demand()->didHesh($did).'/'
             ));
             $mail->smtpmail();
 

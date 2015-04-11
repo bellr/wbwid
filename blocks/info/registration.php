@@ -19,7 +19,7 @@ class registration extends TemplateWidgets {
             /*switch ($_GET['dir']) :
                 case ("exchange") : header("location: http://wm-rb.net/".$_GET['dir'].".aspx"); exit(); break;
                 case ("output_nal") : header("location: http://wm-rb.net/".$_GET['dir'].".aspx"); exit(); break;
-                case ("services_list") : header("location: http://service.wm-rb.net/index.aspx"); exit(); break;
+                case ("services_list") : header("location: http://service.wm-rb.net/index.php"); exit(); break;
             endswitch;*/
 
             //header("Location: ".Config::$base['HOME_URL']);

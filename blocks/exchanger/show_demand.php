@@ -9,6 +9,18 @@ class show_demand extends TemplateWidgets {
 
     }
 
+    public function show($P) {
+
+        $P->did = isset($P->did_hash) ? $P->did_hash : Model::Demand()->didFromHesh($P->object_id);
+        $P->oper_type = $P->object;
+
+        $this->tmplName = 'show_demand';
+
+        $this->block($P);
+
+        return $this;
+    }
+
     public function block($P) {
 
         $P->did = $this->vars['did'] = !empty($P->vars['did']) ? $P->vars['did'] : $P->did;
