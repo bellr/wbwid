@@ -35,7 +35,6 @@ class show_demand extends TemplateWidgets {
 
                     $demand = Model::Demand('HOME')->getInfo(array('did' => $P->did),'demand');
 
-
                     if (!empty($demand)) {
                         //вывод кошелька на кот. будет выполняться перевод
                         $purse = dataBase::DBexchange()->select('balance','purse,desc_val',"where name='".$demand['ex_output']."'");
@@ -242,7 +241,7 @@ class show_demand extends TemplateWidgets {
 
                     if($P->output_system == 'EasyPay') {
 
-                        $result = Vitalis::Controller('CheckPayment','checkPaymentEasypay',$demand[0],'gc');
+                        //$result = Vitalis::Controller('CheckPayment','checkPaymentEasypay',$demand[0],'gc');
 
                     } elseif($P->output_system == 'WMT') {
 
@@ -253,7 +252,7 @@ class show_demand extends TemplateWidgets {
                             'out_val' => $demand[0]['out_val'],
                             'id_pay' => $P->pay_id,
                             'did' => $P->did
-                        ));
+                        ),'sha256');
 
                         if($signature == $P->signature) {
 

@@ -128,10 +128,9 @@ class creat_demand extends TemplateWidgets {
         if(isset($P->p_output)) {sValidate::Purse($P->p_output,$P->ex_out);}
 
         if(isset($P->p_input)) {
+
         	sValidate::Purse($P->p_input,$P->ex_in);
-            if($P->p_input == '32943732' || $P->p_input == 'R399580357066' || $P->p_input == '45304567') {
-                sValidate::$code = 1; sValidate::$message = 'Внимание! Возможно владелец этого счета мошенник!';
-            }
+
         }
 
         sValidate::Email($P->email);

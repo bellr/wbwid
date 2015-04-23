@@ -13,7 +13,7 @@
     <center>
 		<h1>{L_exchange} {desc_val_out} {L_on} {desc_val_in}</h1>
         <div id="forData"></div>
-    <form name="form_exch" id="form_exch" method="post" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'exchanger.creat_demand',p:serialize(this),callback:'creatShowDemand'}); return false;">
+    <form name="form_exch" id="form_exch" method="post" onSubmit="ajaxVs({method:'POST',url:'/widget/',block:'process',act:'exchanger.creat_demand',p:serialize(this),callback:'creatShowDemand'}); return false;">
         <table width="410" bgColor="#ebebeb" class="table-form">
             <tr class="text" bgColor="#ffffff">
                 <td align="right">Отдаете, {desc_val_out}:&nbsp;</td>
