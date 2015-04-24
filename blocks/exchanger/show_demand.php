@@ -227,6 +227,8 @@ class show_demand extends TemplateWidgets {
 
     public function process($P) {
 
+        exit;
+
         $status = 0;
 
         sValidate::isIntWidth($P->did,10,'L_bad_did');
@@ -241,7 +243,7 @@ class show_demand extends TemplateWidgets {
 
                     if($P->output_system == 'EasyPay') {
 
-                        //$result = Vitalis::Controller('CheckPayment','checkPaymentEasypay',$demand[0],'gc');
+                        $result = Vitalis::Controller('CheckPayment','checkPaymentEasypay',$demand[0],'gc');
 
                     } elseif($P->output_system == 'WMT') {
 
