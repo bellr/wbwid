@@ -39,7 +39,7 @@
         Заполните данную форму для регистрации в партнерской программе
     </div><br /><br />
 
-    <form  name="register" id="register" action="index.aspx" method="post" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'info.registration',p:serialize(this)}); return false;">
+    <form  name="register" id="register" action="index.aspx" method="post" onSubmit="ajaxVs({method:'POST', url:'/widget/',block:'process',act:'info.registration',p:serialize(this)}); return false;">
         <table width="400"  border="0" cellspacing="1" cellpadding="10" bgColor="#ebebeb">
             <tr align="center" bgColor="#ffffff">
                 <td class="text"><label class="hint-1" for="email">Ваш E-mail :</label></td>
