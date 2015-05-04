@@ -11,7 +11,7 @@
             <div class="line-title">
                 <span class="title-kabinet">{L_my_kabinet}</span> <a href="{HOME_URL}/registration/">{L_register}</a> <span class="tag-a" onclick="enter_form()">{L_rest_pass}</span>
             </div>
-            <form name="enter_pertner" id="enter_pertner" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'info.registration',p:serialize(this),callback:'enterKabinet'}); return false;" style="display:block">
+            <form name="enter_pertner" id="enter_pertner" onSubmit="ajaxVs({method:'POST', url:'/widget/',block:'process',act:'info.registration',p:serialize(this),callback:'enterKabinet'}); return false;" style="display:block">
                 <div class="enter-form">
                     <input type="text" name="email" size="15" maxlength="52" placeholder="{L_your_email}" />
                     <input type="hidden" name="action" value="enter" />
@@ -20,7 +20,7 @@
                 </div>
                 <button class="button_yellow">{L_enter}</button>
             </form>
-            <form name="rest_pass" id="rest_pass" onSubmit="ajaxVs({url:'/widget/',block:'process',act:'info.registration',p:serialize(this)}); return false;" style="display:none">
+            <form name="rest_pass" id="rest_pass" onSubmit="ajaxVs({method:'POST', url:'/widget/',block:'process',act:'info.registration',p:serialize(this)}); return false;" style="display:none">
                 <div class="enter-form">
                     <input type="hidden" name="action" value="mess_pass" />
                     <input type="text" name="email" size="27" maxlength="52" placeholder="{L_your_email}" />
