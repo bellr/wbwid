@@ -40,10 +40,6 @@ class registration extends TemplateWidgets {
 
                 $P->host = strtolower($P->host);
                 sValidate::Email($P->email);
-                sValidate::Password($P->pass);
-                sValidate::Password($P->repass);
-                sValidate::isCompare($P->pass,$P->repass);
-                //sValidate::Url($P->host);
 
                 if(!sValidate::$code) {
 
@@ -59,8 +55,16 @@ class registration extends TemplateWidgets {
                     }
 
                     if(!$status) {
+
+                        $password = sUser::generationPassword();
+
                         $p = explode("@",$P->email);
-                        dataBase::DBmain()->insert('partner',array('email'=>$P->email,'password'=>md5($P->pass),'username'=>$p[0],'host'=>$P->host));
+                        dataBase::DBmain()->insert('partner',array(
+                            'email'     => $P->email,
+                            'password'  => sUser::createPassword(Model::Partner(),$password),
+                            'username'  => $p[0],
+                            'host'      => $P->host
+                        ));
 
                         $mail = mailSender::init();
                         $mail->to = $P->email;
@@ -69,7 +73,7 @@ class registration extends TemplateWidgets {
                             'username' => $p[0],
                             'bottom_support' => parent::iterate_tmpl('emails',Config::getLang(),'bottom_support'),
                             'email' => $P->email,
-                            'pass' => $P->pass,
+                            'pass' => $password,
                             'host' => $P->host,
                         ));
                         $mail->smtpmail();
@@ -86,12 +90,15 @@ class registration extends TemplateWidgets {
                 $user = explode("@",$P->email);
 
                 if(!sValidate::$code) {
+
                     $dubl = dataBase::DBmain()->select('partner',
                         'id',
                         "where email='".$P->email."'");
+
                     if(!empty($dubl)) {
-                        $pass = substr(swDemand::wm_ReqID(),4,10);
-                        dataBase::DBmain()->update('partner',array('password'=>md5($pass)),"where email='{$P->email}'");
+
+                        $pass = sUser::generationPassword();
+                        dataBase::DBmain()->update('partner',array('password'=>sUser::createPassword(Model::Partner(),$pass)),"where email='{$P->email}'");
 
                         $mail = mailSender::init();
                         $mail->to = $P->email;
@@ -119,7 +126,7 @@ class registration extends TemplateWidgets {
                 if(!sValidate::$code) {
                     $isset = dataBase::DBmain()->select('partner',
                         'id,email',
-                        "where email='".$P->email."' and password='".md5($P->passw)."'");
+                        "where email='".$P->email."' and password='".sUser::createPassword(Model::Partner(),$P->passw)."'");
 
                     if(!empty($isset)) {
                         Session::set('id',$isset[0]['id']);
